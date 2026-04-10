@@ -1,0 +1,65 @@
+app DoTheJobAPP {
+  wasp: {
+    version: "^0.22.0"
+  },
+  title: "DoTheJobAPP",
+  head: [
+    "<link rel='icon' href='/favicon.ico' />",
+  ],
+  client: {
+    rootComponent: import Layout from "@src/Layout",
+  },
+  auth: {
+    userEntity: "User",
+    methods: {
+      usernameAndPassword: {}
+    },
+    onAuthFailedRedirectTo: "/login",
+    onAuthSucceededRedirectTo: "/"
+  },
+}
+
+route LoginRoute { path: "/login", to: LoginPage }
+page LoginPage {
+  component: import Login from "@src/pages/auth/Login"
+}
+route SignupRoute { path: "/signup", to: SignupPage }
+page SignupPage {
+  component: import Signup from "@src/pages/auth/Signup"
+}
+
+action createTask {
+  fn: import { createTask } from "@src/tasks/actions.js",
+  entities: [Task]
+}
+
+action updateTask {
+  fn: import { updateTask } from "@src/tasks/actions.js",
+  entities: [Task, User]
+}
+
+action toggleTaskStatus {
+  fn: import { toggleTaskStatus } from "@src/tasks/actions.js",
+  entities: [Task, User]
+}
+
+action deleteTask {
+  fn: import { deleteTask } from "@src/tasks/actions.js",
+  entities: [Task, User]
+}
+
+action clearUserTasks {
+  fn: import { clearUserTasks } from "@src/tasks/actions.js",
+  entities: [Task]
+}
+
+query getTasks {
+  fn: import { getTasks } from "@src/tasks/queries.js",
+  entities: [Task, User]
+}
+
+route HomeRoute { path: "/", to: TasksPage }
+page TasksPage {
+  component: import TasksPage from "@src/pages/TasksPage.jsx",
+  authRequired: false
+}
